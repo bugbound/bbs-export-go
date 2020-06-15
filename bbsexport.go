@@ -26,7 +26,10 @@ func main() {
         //export_domains()
         foo1 := new(PagedRecords) // or &Foo{}
         getJson("http://bbsstore-service:7002/api/dns_store?page=10", foo1)
-        println(foo1.Objects[0].Domain)
+        //println(foo1.Objects[0].Domain)
+        for i, s := range foo1.Objects {
+            fmt.Println(i, s.domain)
+        }
     }
 }
 
