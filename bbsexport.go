@@ -23,7 +23,7 @@ type DomainRecord struct {
 func main() {
     if os.Args[1] == "domain" {
         //export_domains()
-        foo1 := new(DomainRecord) // or &Foo{}
+        foo1 := new(PagedRecords) // or &Foo{}
         getJson("http://bbsstore-service:7002/api/dns_store?page=1", foo1)
         println(foo1.num_results)
     }
