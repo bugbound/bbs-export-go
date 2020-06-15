@@ -10,7 +10,7 @@ import (
 )
 
 
-type PagedRecords struct {
+type DomainPagedRecords struct {
     Num_results int  
     Page int
     Objects []DomainRecord
@@ -22,10 +22,21 @@ type DomainRecord struct {
     Id int
 }
 
+type UrlPagedRecords struct {
+    Num_results int  
+    Page int
+    Objects []UrlRecord
+    Total_pages int
+}
+
+type UrlRecord struct {
+    Url string
+    Id int
+}
+
 func main() {
     if os.Args[1] == "domain" {
-        //export_domains()
-        firstPage := new(PagedRecords) // or &Foo{}
+        firstPage := new(DomainPagedRecords) 
         link := "http://bbsstore-service:7002/api/dns_store"
         getJson("http://bbsstore-service:7002/api/dns_store?page=1", firstPage)
         totalPages := firstPage.Total_pages
@@ -36,18 +47,34 @@ func main() {
             concatenated := fmt.Sprintf("%s?page=%d", link, i)
             //fmt.Println(concatenated)
             
-            jsonData := new(PagedRecords)
+            jsonData := new(DomainPagedRecords)
             getJson(concatenated, jsonData)
             
             for currentIndex := range jsonData.Objects {
                 fmt.Println(jsonData.Objects[currentIndex].Domain)
             }
         }
+    }
+    
+    if os.Args[1] == "url" {
+        firstPage := new(UrlPagedRecords) 
+        link := "http://bbsstore-service:7002/api/url_store"
+        getJson("http://bbsstore-service:7002/api/url_store?page=1", firstPage)
+        totalPages := firstPage.Total_pages
+        //fmt.Println(totalPages)
         
-        //println(foo1.Objects[0].Domain)
-        //for i := range firstPage.Objects {
-        //   fmt.Println(firstPage.Objects[i].Domain)
-        //}
+        for i := 1; i <= totalPages; i++ {
+            //fmt.Println(i)
+            concatenated := fmt.Sprintf("%s?page=%d", link, i)
+            //fmt.Println(concatenated)
+            
+            jsonData := new(UrlPagedRecords)
+            getJson(concatenated, jsonData)
+            
+            for currentIndex := range jsonData.Objects {
+                fmt.Println(jsonData.Objects[currentIndex].Url)
+            }
+        }
     }
 }
 
@@ -62,25 +89,4 @@ func getJson(url string, target interface{}) error {
     defer r.Body.Close()
 
     return json.NewDecoder(r.Body).Decode(target)
-}
-
-func export_domains() {
-    url := "http://bbsstore-service:7002/api/dns_store?page=1"
-    
-    
-    req, err := http.NewRequest("GET", url, nil)
-    //req.Header.Set("Content-Type", "application/json")
-
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    if err != nil {
-        panic(err)
-    }
-    defer resp.Body.Close()
-
-    fmt.Println("response Status:", resp.Status)
-    //fmt.Println("response Headers:", resp.Header)
-    body, _ := ioutil.ReadAll(resp.Body)
-    fmt.Println("response Body:", string(body))
-    
 }
