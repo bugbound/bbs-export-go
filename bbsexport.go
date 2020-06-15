@@ -20,11 +20,10 @@ func main() {
 func export_domains() {
     url := "http://bbsstore-service:7002/api/dns_store"
     var pageNumber = 1
-    var jsonStrStart = []byte(`{"page":"`)
-    var jsonStrEnd = []byte(`"}`)
-    var part1 = append(jsonStrStart, pageNumber...)
-    var completeValue = append(part1, jsonStrEnd...)
-    req, err := http.NewRequest("POST", url, bytes.NewBuffer(completeValue))
+    var json = []byte(`{"page":"1"}`)
+    
+    
+    req, err := http.NewRequest("POST", url, bytes.NewBuffer(json))
     req.Header.Set("Content-Type", "application/json")
 
     client := &http.Client{}
