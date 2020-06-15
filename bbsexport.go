@@ -11,7 +11,7 @@ import (
 
 
 type PagedRecords struct {
-    num_results     int  
+    num_results int  
     objects   []DomainRecord 
 }
 
