@@ -16,7 +16,7 @@ type PagedRecords struct {
 }
 
 type DomainRecord struct {
-    domain string
+    Domain string
     id int
 }
 
@@ -25,7 +25,7 @@ func main() {
         //export_domains()
         foo1 := new(DomainRecord) // or &Foo{}
         getJson("http://bbsstore-service:7002/api/dns_store/1", foo1)
-        println(foo1.domain)
+        println(foo1.Domain)
     }
 }
 
