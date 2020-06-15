@@ -16,16 +16,16 @@ type PagedRecords struct {
 }
 
 type DomainRecord struct {
-    Domain string
-    Id int
+    domain string
+    id int
 }
 
 func main() {
     if os.Args[1] == "domain" {
         //export_domains()
-        foo1 := new(PagedRecords) // or &Foo{}
-        getJson("http://bbsstore-service:7002/api/dns_store?page=1", foo1)
-        println(foo1.page)
+        foo1 := new(DomainRecord) // or &Foo{}
+        getJson("http://bbsstore-service:7002/api/dns_store/1", foo1)
+        println(foo1.id)
     }
 }
 
