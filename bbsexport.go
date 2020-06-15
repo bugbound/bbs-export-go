@@ -8,10 +8,32 @@ import (
 )
 
 
+
+type DomainRecord struct {
+    Domain string
+    Id int
+}
+
 func main() {
     if os.Args[1] == "domain" {
-        export_domains()
+        //export_domains()
+        foo1 := new(DomainRecord) // or &Foo{}
+        getJson("http://bbsstore-service:7002/api/dns_store/1", foo1)
+        println(foo1.Domain)
     }
+}
+
+
+var myClient = &http.Client{Timeout: 10 * time.Second}
+
+func getJson(url string, target interface{}) error {
+    r, err := myClient.Get(url)
+    if err != nil {
+        return err
+    }
+    defer r.Body.Close()
+
+    return json.NewDecoder(r.Body).Decode(target)
 }
 
 func export_domains() {
