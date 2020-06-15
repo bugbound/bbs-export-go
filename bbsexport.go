@@ -17,7 +17,6 @@ func main() {
 
 func export_domains() {
     url := "http://bbsstore-service:7002/api/dns_store"
-    var pageNumber = 1
     var json = []byte(`{"page":"1"}`)
     
     
