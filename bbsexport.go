@@ -13,7 +13,8 @@ import (
 type PagedRecords struct {
     Num_results int  
     Page int
-    Objects []DomainRecord 
+    Objects []DomainRecord
+    Total_pages int
 }
 
 type DomainRecord struct {
@@ -24,12 +25,29 @@ type DomainRecord struct {
 func main() {
     if os.Args[1] == "domain" {
         //export_domains()
-        foo1 := new(PagedRecords) // or &Foo{}
-        getJson("http://bbsstore-service:7002/api/dns_store?page=10", foo1)
-        //println(foo1.Objects[0].Domain)
-        for i := range foo1.Objects {
-            fmt.Println(foo1.Objects[i].Domain)
+        firstPage := new(PagedRecords) // or &Foo{}
+        link := "http://bbsstore-service:7002/api/dns_store"
+        getJson("http://bbsstore-service:7002/api/dns_store?page=1", firstPage)
+        totalPages := firstPage.Total_pages
+        //fmt.Println(totalPages)
+        
+        for i := 1; i <= totalPages; i++ {
+            //fmt.Println(i)
+            concatenated := fmt.Sprintf("%s?page=%d", link, i)
+            //fmt.Println(concatenated)
+            
+            jsonData := new(PagedRecords)
+            getJson(concatenated, jsonData)
+            
+            for currentIndex := range jsonData.Objects {
+                fmt.Println(jsonData.Objects[currentIndex].Domain)
+            }
         }
+        
+        //println(foo1.Objects[0].Domain)
+        //for i := range firstPage.Objects {
+        //   fmt.Println(firstPage.Objects[i].Domain)
+        //}
     }
 }
 
