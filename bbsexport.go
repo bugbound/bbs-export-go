@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
     "net/http"
-    "bytes"
     "io/ioutil"
 )
 
@@ -19,7 +18,7 @@ func export_domains() {
     url := "http://bbsstore-service:7002/api/dns_store?page=1"
     
     
-    req, err := http.NewRequest("GET", url)
+    req, err := http.NewRequest("GET", url, nil)
     //req.Header.Set("Content-Type", "application/json")
 
     client := &http.Client{}
